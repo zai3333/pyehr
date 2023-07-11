@@ -16,6 +16,15 @@ class Sparsemax(nn.Module):
         self.dim = -1 if dim is None else dim
 
     def forward(self, input):
+        """
+        Forward pass of the sparsemax function.
+
+        Args:
+            input (torch.Tensor): Input logits tensor.
+
+        Returns:
+            torch.Tensor: Output tensor after applying the sparsemax function.
+        """
         original_size = input.size()
         input = input.view(-1, input.size(self.dim))
 
@@ -46,6 +55,15 @@ class Sparsemax(nn.Module):
         return output
 
     def backward(self, grad_output):
+        """
+        Backward pass of the sparsemax function.
+
+        Args:
+            grad_output (torch.Tensor): Gradient of the loss with respect to the output of the sparsemax layer.
+
+        Returns:
+            torch.Tensor: Gradient of the loss with respect to the input of the sparsemax layer.
+        """
         dim = 1
 
         nonzeros = torch.ne(self.output, 0)
@@ -80,6 +98,16 @@ class CausalConv1d(torch.nn.Conv1d):
         )
 
     def forward(self, input):
+        """
+        Forward pass of the 1D causal convolution layer.
+
+        Args:
+            input (torch.Tensor): Input tensor.
+
+        Returns:
+            torch.Tensor: Output tensor after applying the convolution.
+
+        """
         result = super(CausalConv1d, self).forward(input)
         if self.__padding != 0:
             return result[:, :, : -self.__padding]
@@ -105,6 +133,15 @@ class Recalibration(nn.Module):
         self.softmax = nn.Softmax(dim=1)
 
     def forward(self, x):
+        """
+        Forward pass of the recalibration layer.
+
+        Args:
+            x (torch.Tensor): Input tensor.
+
+        Returns:
+            torch.Tensor: Output tensor after applying the recalibration.
+        """
         b, c, t = x.size()
 
         y_origin = x.permute(0, 2, 1).reshape(b * t, c).contiguous()
@@ -280,6 +317,16 @@ class AdaCare(nn.Module):
         x: torch.tensor,
         mask: Optional[torch.tensor] = None,
     ):
+        """Forward propagation.
+
+        Args:
+            x: a tensor of shape [batch size, sequence len, input_dim].
+            mask: an optional tensor of shape [batch size, sequence len], where
+                1 indicates valid and 0 indicates invalid.
+
+        Returns:
+            out: a tensor of shape [batch size, sequence_len, hidden_dim] representing the patient embedding at each time step.
+        """
         batch_size, time_steps, _ = x.size()
         out = torch.zeros((batch_size, time_steps, self.hidden_dim))
         for cur_time in range(time_steps):

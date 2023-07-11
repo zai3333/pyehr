@@ -12,6 +12,14 @@ from pipelines import DlPipeline, MlPipeline
 project_name = "pyehr"
 
 def run_ml_experiment(config):
+    """Run a single ML experiment
+
+    Args:
+        config (dict): configuration of the experiment
+
+    Returns:
+        perf (dict): performance of the experiment
+    """
     los_config = get_los_info(f'datasets/{config["dataset"]}/processed/fold_{config["fold"]}')
     config.update({"los_info": los_config})
     # data
@@ -24,6 +32,14 @@ def run_ml_experiment(config):
     return perf
 
 def run_dl_experiment(config):
+    """Run a single DL experiment
+
+    Args:
+        config (dict): configuration of the experiment
+
+    Returns:
+        perf (dict): performance of the experiment
+    """
     los_config = get_los_info(f'datasets/{config["dataset"]}/processed/fold_{config["fold"]}')
     config.update({"los_info": los_config})
 

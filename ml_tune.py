@@ -37,6 +37,9 @@ sweep_configuration = {
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 
 def run_experiment():
+    """
+    Run experiment with the given configuration for machine learning models
+    """
     run = wandb.init(project=project_name, config=cfg)
     wandb_logger = WandbLogger(project=project_name, log_model=True) # log only the last (best) checkpoint
     config = wandb.config

@@ -43,6 +43,14 @@ sweep_configuration = {
 sweep_id = wandb.sweep(sweep_configuration, project=project_name)
 
 def run_experiment():
+    """
+    Run experiment with the given configuration
+
+    This code demonstrates a complete workflow for conducting hyperparameter tuning for deep learning models. It
+    leverages the capabilities of Hydra for managing configurations, W&B for experiment tracking and visualization,
+    and Lightning for training the models.
+
+    """
     run = wandb.init(project=project_name, config=cfg)
     wandb_logger = WandbLogger(project=project_name, log_model=True) # log only the last (best) checkpoint
     config = wandb.config
