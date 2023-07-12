@@ -99,6 +99,17 @@ class AgentLayer(nn.Module):
         self.relu = nn.ReLU()
 
     def choose_action(self, observation, agent=1):
+        """choose an action
+        selects an action based on the observed data and the current agent. It also keeps track of the chosen actions, their probabilities, 
+        entropies, and baseline values. These records can be used during the training process to calculate policy gradients and optimize the model.
+
+        Args:
+            observation: the observed data.
+            agent: the current agent. Default is 1.
+
+        Returns:
+            actions: the chosen actions.
+        """
         observation = observation.detach()
 
         if agent == 1:
@@ -255,6 +266,11 @@ class AgentLayer(nn.Module):
         return last_out, h
 
 class Agent(nn.Module):
+    """Agent model for Dr. Agent architecture.
+
+    The Agent class is a model class that wraps the AgentLayer. It is used to define the overall structure of the Agent
+    model and its forward propagation process. It passes the input data to the AgentLayer for processing and returns the output result of the AgentLayer as the model's output.
+    """
     def __init__(
         self,
         lab_dim: int,
@@ -293,6 +309,17 @@ class Agent(nn.Module):
         static: Optional[torch.tensor] = None,
         mask: Optional[torch.tensor] = None,
     ) -> torch.tensor:
+        """
+        Forward pass of the Agent model.
+
+        Args:
+            x (torch.tensor): Input tensor of shape [batch_size, sequence_len, lab_dim] representing the dynamic features.
+            static (torch.tensor, optional): Static features tensor of shape [batch_size, demo_dim]. Default is None.
+            mask (torch.tensor, optional): Mask tensor of shape [batch_size, sequence_len] indicating valid/invalid steps. Default is None.
+
+        Returns:
+            torch.tensor: Output tensor of shape [batch_size, sequence_len, hidden_dim] representing the encoded patient embeddings.
+        """
         # batch_size, time_steps, _ = x.size()
         # out = torch.zeros((batch_size, time_steps, self.hidden_dim))
         # for cur_time in range(time_steps):

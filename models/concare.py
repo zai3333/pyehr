@@ -8,6 +8,14 @@ from models.utils import generate_mask, get_last_visit
 
 
 class FinalAttentionQKV(nn.Module):
+    """Final attention layer for the ConCare model.
+
+    Attributes:
+        attention_input_dim: The input dimension of the attention layer.
+        attention_hidden_dim: The hidden dimension of the attention layer.
+        attention_type: The type of attention to use. Can be one of "add", "mul", or "concat".
+        dropout: The dropout rate to use.
+    """
     def __init__(
         self,
         attention_input_dim: int,

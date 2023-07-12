@@ -12,7 +12,7 @@ from pipelines import DlPipeline, MlPipeline
 project_name = "pyehr"
 
 def run_ml_experiment(config):
-    """Run a single ML experiment
+    """Run a single ML experiment 
 
     Args:
         config (dict): configuration of the experiment
@@ -33,6 +33,10 @@ def run_ml_experiment(config):
 
 def run_dl_experiment(config):
     """Run a single DL experiment
+
+    It runs a deep learning experiment based on the provided configuration, leveraging the DlPipeline, EhrDataModule,
+    and Lightning Trainer.It tests the performance of the pipeline using a specific checkpoint and returns the obtained
+    performance metrics.
 
     Args:
         config (dict): configuration of the experiment
