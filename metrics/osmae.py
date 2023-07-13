@@ -23,13 +23,21 @@ import numpy as np
 
 
 def calculate_outcome_prediction_result(outcome_pred, outcome_true):
+    """Determines whether a prediction of the outcome is correct or not."""
     outcome_pred = 1 if outcome_pred > 0.5 else 0
     return "true" if outcome_pred == outcome_true else "false"
 
 
 def calculate_epsilon(los_true, threshold, large_los):
-    """
-    epsilon is the decay term
+    """Calculates the decay term epsilon used in the OSMAE score.
+
+    Args:
+        los_true (float): True length of stay.
+        threshold (float): Threshold value.
+        large_los (float): 95th percentile of length of stay values.
+
+    Returns:
+        float: Calculated decay term epsilon.
     """
     if los_true <= threshold:
         return 1
@@ -38,6 +46,17 @@ def calculate_epsilon(los_true, threshold, large_los):
 
 
 def calculate_osmae(los_pred, los_true, large_los, threshold, case="true"):
+    """Calculates the OSMAE score for a single prediction.
+    Args:
+        los_pred (float): Predicted length of stay.
+        los_true (float): True length of stay.
+        large_los (float): 95th percentile of length of stay values.
+        threshold (float): Threshold value.
+        case (str): Case type ("true" or "false").
+
+    Returns:
+        float: Calculated OSMAE score.
+   """
     if case == "true":
         epsilon = calculate_epsilon(los_true, threshold, large_los)
         return epsilon * np.abs(los_pred - los_true)
@@ -57,10 +76,19 @@ def osmae_score(
     threshold,
     verbose=0,
 ):
-    """
+    """Calculates the mean OSMAE score
+
     Args:
-        - large_los: 95% largest LOS value (patient-wise)
-        - threshold: 50%*mean_los (patient-wise) 
+        y_true_outcome (np.array): True outcome values.
+        y_true_los (np.array): True length of stay values.
+        y_pred_outcome (np.array): Predicted outcome values.
+        y_pred_los (np.array): Predicted length of stay values.
+        large_los (float): 95% largest LOS value (patient-wise).
+        threshold (float): 50%*mean_los (patient-wise) .
+        verbose (int): Verbosity level. Set to 1 to print individual OSMAE scores.
+
+    Returns:
+        dict: Dictionary containing the mean OSMAE score.
 
     Note:
         - y/predictions are already flattened here

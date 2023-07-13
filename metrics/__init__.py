@@ -8,9 +8,24 @@ from .utils import check_metric_is_better
 
 
 def reverse_los(y, los_info):
+    """Reverse the normalization of los"""
     return y * los_info["los_std"] + los_info["los_mean"]
 
 def get_all_metrics(preds, labels, task, los_info):
+    """Get all metrics for a given task
+
+    Args:
+        preds (torch.Tensor): predictions
+        labels (torch.Tensor): labels
+        task (str): Task type. Supported values: "outcome", "los", "multitask".
+        los_info (dict): Dictionary containing threshold and large_los information.
+
+    Returns:
+        dict: Dictionary containing all metrics
+
+    Raises:
+        ValueError: If task is not supported
+    """
     threshold = los_info["threshold"]
     large_los = los_info["large_los"]
 

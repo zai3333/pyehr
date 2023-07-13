@@ -1,4 +1,5 @@
 def check_metric_is_better(cur_best, main_metric, score, task):
+    """Check if the current metric is better than the previous best metric."""
     if task=="los":
         if cur_best=={}:
             return True

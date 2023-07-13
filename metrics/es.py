@@ -2,6 +2,18 @@ import numpy as np
 
 
 def calculate_confusion_matrix_value_result(outcome_pred, outcome_true):
+    """Calculate confusion matrix value result
+
+    Args:
+        outcome_pred (float): predicted outcome
+        outcome_true (float): true outcome
+
+    Returns:
+        str: confusion matrix value result
+
+    Raises:
+        ValueError: Unknown value occurred
+    """
     outcome_pred = 1 if outcome_pred > 0.5 else 0
     if outcome_pred == 1 and outcome_true == 1:
         return "tp"
@@ -15,6 +27,16 @@ def calculate_confusion_matrix_value_result(outcome_pred, outcome_true):
         raise ValueError("Unknown value occurred")
 
 def calculate_es(los_true, threshold, case="tp"):
+    """Calculate mortality score
+
+    Args:
+        los_true (float): true los
+        threshold (float): threshold
+        case (str, optional): case. Defaults to "tp".
+
+    Returns:
+        float: early mortality score
+    """
     metric = 0.0
     if case == "tp":
         if los_true >= threshold:  # predict correct in early stage
@@ -40,9 +62,17 @@ def es_score(
     threshold,
     verbose=0
 ):
-    """
+    """Calculates the ES for a set of predictions.
+
     Args:
-        - threshold: 50%*mean_los (patient-wise) 
+        y_true_outcome (List[float]): List of true outcome labels.
+        y_true_los (List[float]): List of true length of stay values.
+        y_pred_outcome (List[float]): List of predicted outcome labels.
+        threshold (float): Threshold value for determining early prediction.
+        verbose (int, optional): Verbosity level. Set to 1 to print the ES score. Defaults to 0.
+
+    Returns:
+        Dict[str, float]: Dictionary containing the ES score.
 
     Note:
         - y/predictions are already flattened here

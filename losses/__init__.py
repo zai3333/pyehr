@@ -6,6 +6,17 @@ from .time_aware_loss import get_time_aware_loss
 
 
 def get_loss(y_pred, y_true, task, time_aware=False):
+    """Get loss
+
+    Args:
+        y_pred (torch.Tensor): model predictions
+        y_true (torch.Tensor): truth labels
+        task (str): task name
+        time_aware (bool, optional): whether to use time aware loss. Defaults to False.
+
+    Returns:
+        torch.Tensor: loss
+    """
     if task == "outcome":
         loss = F.binary_cross_entropy(y_pred, y_true[:, 0])
     elif task == "los":

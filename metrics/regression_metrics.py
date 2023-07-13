@@ -3,6 +3,15 @@ from torchmetrics.regression import MeanAbsoluteError, MeanSquaredError, R2Score
 # get regression metrics: mse, mae, rmse, r2
 
 def get_regression_metrics(preds, labels):
+    """Get regression metrics: mse, mae, rmse, r2
+
+    Args:
+        preds (torch.Tensor): predicted values
+        labels (torch.Tensor): truth values
+
+    Returns:
+        dict: dictionary of metrics
+    """
     mse = MeanSquaredError(squared=True)
     rmse = MeanSquaredError(squared=False)
     mae = MeanAbsoluteError()
