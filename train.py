@@ -13,6 +13,11 @@ from pipelines import DlPipeline, MlPipeline
 project_name = "pyehr"
 
 def run_ml_experiment(config):
+    """Run the machine learning experiment.
+
+    Returns:
+        perf (dict): Performance metrics of the experiment.
+    """
     los_config = get_los_info(f'datasets/{config["dataset"]}/processed/fold_{config["fold"]}')
     config.update({"los_info": los_config})
 
@@ -31,6 +36,11 @@ def run_ml_experiment(config):
     return perf
 
 def run_dl_experiment(config):
+    """Run the machine learning experiment.
+
+    Returns:
+        perf (dict): Performance metrics of the experiment.
+    """
     los_config = get_los_info(f'datasets/{config["dataset"]}/processed/fold_{config["fold"]}')
     config.update({"los_info": los_config})
 

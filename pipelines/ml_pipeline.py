@@ -10,6 +10,19 @@ from metrics import check_metric_is_better, get_all_metrics
 
 
 class MlPipeline(L.LightningModule):
+    """A pipeline for training and testing machine learning models.
+
+    Attributes:
+        task (str): Task type, such as "outcome" or "los".
+        los_info (dict): Length of Stay (LOS) information.
+        model_name (str): Name of the model.
+        main_metric (str): Main evaluation metric.
+        cur_best_performance (dict): Dictionary to store the current best performance metrics.
+        model (torch.nn.Module): Model instance.
+        test_performance (dict): Dictionary to store the test performance metrics.
+        test_outputs (dict): Dictionary to store the test outputs.
+        checkpoint_path (str): Path to save the best model checkpoint.
+    """
     def __init__(self, config):
         super().__init__()
         self.save_hyperparameters()
@@ -31,11 +44,28 @@ class MlPipeline(L.LightningModule):
     def forward(self, x):
         pass
     def training_step(self, batch, batch_idx):
-        # the batch is large enough to contain the whole training set
+        """Training step.
+
+        Args:
+            batch: Batch of data.It is large enough to contain the whole training set.
+            batch_idx (int): Index of the current batch.
+
+        Returns:
+            None
+        """
         x, y, lens, pid = batch
         x, y = unpad_batch(x, y, lens)
         self.model.fit(x, y) # y contains both [outcome, los]
     def validation_step(self, batch, batch_idx):
+        """Validation step.
+
+        Args:
+            batch: Batch of data.
+            batch_idx (int): Index of the current batch.
+
+        Returns:
+            main_score: Main evaluation score.
+        """
         x, y, lens, pid = batch
         x, y = unpad_batch(x, y, lens)
         y_hat = self.model.predict(x) # y_hat is the prediction results, outcome or los
@@ -48,6 +78,15 @@ class MlPipeline(L.LightningModule):
             pd.to_pickle(self.model, self.checkpoint_path)
         return main_score
     def test_step(self, batch, batch_idx):
+        """Test step.
+
+        Args:
+            batch: Batch of data.
+            batch_idx (int): Index of the current batch.
+
+        Returns:
+            test_performance: Test performance metrics.
+        """
         x, y, lens, pid = batch
         x, y = unpad_batch(x, y, lens)
         self.model = pd.read_pickle(self.checkpoint_path)
